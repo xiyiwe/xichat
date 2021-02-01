@@ -8,6 +8,8 @@ class XichatApplicationTests {
 
     @Test
     void contextLoads() {
+
+        }
     }
 
-}
+

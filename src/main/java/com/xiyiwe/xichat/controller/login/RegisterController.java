@@ -1,6 +1,5 @@
 package com.xiyiwe.xichat.controller.login;
 
-import com.alibaba.fastjson.JSON;
 import com.xiyiwe.xichat.dao.user.UserMapper;
 import com.xiyiwe.xichat.pojo.user.User;
 import com.xiyiwe.xichat.utils.secret.AesUtil;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.UUID;
 
 @Controller
 public class RegisterController {
@@ -28,6 +25,7 @@ public class RegisterController {
             userAdd.setUserAccount(userAccount);
             userAdd.setPassword(DescUtil.encrypt(password));
             userAdd.setUserName(user.getUserName());
+            userAdd.setUserImg("");
 //            userAdd.setUserId(UUID.randomUUID().toString());
             userMapper.insert(userAdd);
             return "ok";

@@ -3,6 +3,7 @@
 <mapper namespace="com.xiyiwe.xichat.dao.user.UserMapper">
 
     <select id="selectByUserAccount" resultType="com.xiyiwe.xichat.pojo.user.User">
-        select * from user where userAccount = #{userAccount}
+        select * from userinfo where userAccount = #{userAccount}
     </select>
+
 </mapper>
