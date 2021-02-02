@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiyiwe.xichat.dao.friend.ChatFriendMapper">
+
+    <insert id="insertChatFriend" parameterType="com.xiyiwe.xichat.pojo.friend.ChatFriend">
+       insert into chat_friends (userAccount,fUserAccount,addTime) values (#{userAccount},#{fUserAccount},#{addTime})
+    </insert>
+    <select id="selectUserFriendsByUserAccount" resultType="com.xiyiwe.xichat.pojo.user.SimpleUserInfo">
+        select u.userAccount,u.userName from chat_friends as cf,userinfo as u where cf.userAccount = #{userAccount} and cf.fuserAccount = u.userAccount
+    </select>
+</mapper>
