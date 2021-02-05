@@ -1,8 +1,13 @@
 package com.xiyiwe.xichat.config.ws;
 
+import com.alibaba.fastjson.JSON;
+import com.xiyiwe.xichat.pojo.message.Message;
+import com.xiyiwe.xichat.service.message.MessageService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -10,11 +15,21 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.HashMap;
 
 @Slf4j
 @Component
 @ServerEndpoint("/friendsChat/{userAccount}")
 public class WebSocketEndPoint {
+//    public static WebSocketEndPoint webSocketEndPoint;
+//    public MessageService messageService =SpringContextUtil.getContext().getBean(MessageService.class);;
+    public static MessageService messageService;
+    @Autowired
+    public MessageService messageService2;
+    @PostConstruct
+    public void init(){
+        messageService = messageService2;
+    }
     @OnOpen
     public void onOpen(Session session, @PathParam("userAccount") String userAccount) {
         SessionPool.sessions.put(userAccount,session);
@@ -32,7 +47,10 @@ public class WebSocketEndPoint {
     }
     @OnMessage
     public void OnMessage(String message,Session session){
-        SessionPool.sendMessage(message);
+        System.out.println(message);
+        HashMap params = JSON.parseObject(message, HashMap.class);
+        Message returnMessage = messageService.insertMessage(params);
+        SessionPool.sendMessage(returnMessage);
     }
 
 }

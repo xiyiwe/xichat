@@ -5,12 +5,6 @@ import java.security.Key;
 /**
  * 类名称：SymmetryCoder
  * 类描述：对称性加密算法接口
- * 创建人：luoyr
- * 创建时间：2020-08-03 09:19
- * 修改人：
- * 修改时间：
- * 版本信息：@version 3.1.1
- * 修改备注：
  */
 public interface SymmetryCoder {
 

@@ -7,6 +7,6 @@ import lombok.Data;
 @TableName("userGroup")
 public class UserGroup {
     String groupId;
-    String userId;
+    String userAccount;
     String userGroupId;
 }

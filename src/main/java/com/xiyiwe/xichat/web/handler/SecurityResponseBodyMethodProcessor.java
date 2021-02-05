@@ -22,12 +22,6 @@
 // * 类名称：SecurityHandlerMethodReturnValueHandler
 // * 类描述：安全方法返回值加密
 // *  对返回值为 JSONResponse对象中的属性 resultData 进行加密处理. {@link JSONResponse}
-// * 创建人：luoyr
-// * 创建时间：2020-08-04 15:38
-// * 修改人：
-// * 修改时间：
-// * 版本信息：@version 3.1.1
-// * 修改备注：
 // */
 //@Slf4j
 //public class SecurityResponseBodyMethodProcessor extends RequestResponseBodyMethodProcessor {
