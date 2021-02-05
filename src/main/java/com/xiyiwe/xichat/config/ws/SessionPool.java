@@ -48,6 +48,11 @@ public class SessionPool {
         sendMessage.setReceiverAccount(returnMessage.getReceiverAccount());
         sendMessage.setSenderAccount(returnMessage.getSenderAccount());
         sendMessage.setCreateTime(returnMessage.getCreateTime());
+        if(returnMessage.getFileUrl()!=null){
+            sendMessage.setFileUrl(returnMessage.getFileUrl());
+        }
+        //TODO
+        //fileUrl未set
         Session toUserSession = sessions.get(sendMessage.getReceiverAccount());
         String toMessage = JSON.toJSONString(sendMessage);
         if(toUserSession != null){

@@ -19,5 +19,5 @@ public class Message {
     String receiverAccount;
     String senderName;
     String receiverName;
-    String imgUrl;
+    String fileUrl;
 }
