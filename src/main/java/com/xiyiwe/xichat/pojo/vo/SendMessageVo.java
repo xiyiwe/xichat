@@ -16,4 +16,5 @@ public class SendMessageVo {
     String receiverAccount;
     String receiverName;
     Date createTime;
+    String fileUrl;
 }
