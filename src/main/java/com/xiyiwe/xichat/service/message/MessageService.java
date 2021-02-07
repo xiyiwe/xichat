@@ -24,6 +24,8 @@ public class MessageService {
         message.setReceiverName(params.get("receiverName"));
         message.setSenderName(params.get("senderName"));
         message.setSenderAccount(params.get("senderAccount"));
+        message.setIsRead("0");
+        message.setFileUrl(params.get("fileUrl"));
         messageMapper.insert(message);
         return message;
     }
@@ -31,5 +33,8 @@ public class MessageService {
     public List<Message> selectPageFriendMessagesByUserAccount( String userAccount,String fUserAccount,int page){
         page=page*10;
         return messageMapper.selectPageFriendMessagesByUserAccount(userAccount,fUserAccount,page);
+    }
+    public int updateById(Message message){
+        return messageMapper.updateById(message);
     }
 }

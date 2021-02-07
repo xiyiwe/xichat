@@ -17,4 +17,5 @@ public class SendMessageVo {
     String receiverName;
     Date createTime;
     String fileUrl;
+    String isRead;
 }

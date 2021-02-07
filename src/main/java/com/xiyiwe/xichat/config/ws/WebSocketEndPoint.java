@@ -3,6 +3,7 @@ package com.xiyiwe.xichat.config.ws;
 import com.alibaba.fastjson.JSON;
 import com.xiyiwe.xichat.pojo.message.Message;
 import com.xiyiwe.xichat.service.message.MessageService;
+import com.xiyiwe.xichat.utils.encode.ServerEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 
 @Slf4j
 @Component
-@ServerEndpoint("/friendsChat/{userAccount}")
+@ServerEndpoint(value = "/friendsChat/{userAccount}",encoders = ServerEncoder.class)
 public class WebSocketEndPoint {
 //    public static WebSocketEndPoint webSocketEndPoint;
 //    public MessageService messageService =SpringContextUtil.getContext().getBean(MessageService.class);;
