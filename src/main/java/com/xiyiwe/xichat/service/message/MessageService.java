@@ -37,4 +37,17 @@ public class MessageService {
     public int updateById(Message message){
         return messageMapper.updateById(message);
     }
+
+    public void updateFriendNotReadMessage(String userAccount, String fUserAccount) {
+        messageMapper.updateFriendNotReadMessage(userAccount, fUserAccount);
+    }
+
+    public List<Message> getFriendNotReadMessage(String userAccount, String fUserAccount) {
+        return messageMapper.getFriendNotReadMessage(userAccount,fUserAccount);
+    }
+
+//    public List<Message> selectAllNotReadMessage(String userAccount) {
+//        List<Message> notReadMessage = messageMapper.selectAllNotReadMessage(userAccount);
+//        return null;
+//    }
 }

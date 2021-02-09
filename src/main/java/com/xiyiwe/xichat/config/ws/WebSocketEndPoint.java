@@ -34,6 +34,7 @@ public class WebSocketEndPoint {
     @OnOpen
     public void onOpen(Session session, @PathParam("userAccount") String userAccount) {
         SessionPool.sessions.put(userAccount,session);
+//        List<Message> notReadMessage = messageService.selectAllNotReadMessage(userAccount);
 //        List<Session> sessionList = groupMemberInfoMap.computeIfAbsent(sid, k -> new ArrayList<>());
 //        Set<Integer> onlineUserList = onlineUserMap.computeIfAbsent(sid, k -> new HashSet<>());
 //        onlineUserList.add(userId);
@@ -43,6 +44,7 @@ public class WebSocketEndPoint {
     }
     @OnClose
     public void onClose(Session session) throws IOException {
+        System.out.println("调用了OnClose");
         SessionPool.close(session.getId());
         session.close();
     }

@@ -13,4 +13,8 @@ import java.util.List;
 public interface MessageMapper extends BaseMapper<Message> {
 
     List<Message> selectPageFriendMessagesByUserAccount(@Param("senderAccount")String userAccount,@Param("receiverAccount") String fUserAccount, @Param("page")int page);
+
+    void updateFriendNotReadMessage(@Param("receiverAccount") String receiverAccount, @Param("senderAccount")String senderAccount);
+
+    List<Message> getFriendNotReadMessage(@Param("receiverAccount") String receiverAccount, @Param("senderAccount")String senderAccount);
 }

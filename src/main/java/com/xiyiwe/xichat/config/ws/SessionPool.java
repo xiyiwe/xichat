@@ -46,25 +46,17 @@ public class SessionPool {
     }
     public static void sendMessage( Message returnMessage){
 
-//        SendMessageVo sendMessage = new SendMessageVo();
-//        sendMessage.setSendMessage(returnMessage.getMessageContent());
-//        sendMessage.setSenderName(returnMessage.getSenderName());
-//        sendMessage.setReceiverName(returnMessage.getReceiverName());
-//        sendMessage.setReceiverAccount(returnMessage.getReceiverAccount());
-//        sendMessage.setSenderAccount(returnMessage.getSenderAccount());
-//        sendMessage.setCreateTime(returnMessage.getCreateTime());
-//        sendMessage.setIsRead("0");
-//        if(returnMessage.getFileUrl()!=null){
-//            sendMessage.setFileUrl(returnMessage.getFileUrl());
-//        }
         //TODO
         //fileUrl未set，为null处理
         Session toUserSession = sessions.get(returnMessage.getReceiverAccount());
         if(toUserSession != null){
-            returnMessage.setIsRead("1");
-            messageService.updateById(returnMessage);
+//            returnMessage.setIsRead("1");
+//            messageService.updateById(returnMessage);
             String toMessage = JSON.toJSONString(returnMessage);
 //            toUserSession.getAsyncRemote().sendText(toMessage);
+            toUserSession.getAsyncRemote().sendObject(returnMessage);
+            toUserSession = sessions.get(returnMessage.getSenderAccount());
+            System.out.println("发送的数据："+returnMessage);
             toUserSession.getAsyncRemote().sendObject(returnMessage);
         }
 //        for (String sessionId : SessionPool.sessions.keySet()){
