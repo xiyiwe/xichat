@@ -71,10 +71,10 @@ public class FriendController {
     }
     @GetMapping("/friend/updateFriendNotReadMessage/{fUserAccount}")
     void getNotReadMessageFromFriend(@PathVariable String fUserAccount,HttpServletRequest request){
-//        if(request.getHeader("Authorization")!=null){
-//            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
-//            messageService.updateFriendNotReadMessage(userAccount,fUserAccount);
-//        }
+        if(request.getHeader("Authorization")!=null){
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            messageService.updateFriendNotReadMessage(userAccount,fUserAccount);
+        }
     }
     //查询好友发来的具体未读消息
     @GetMapping("/friend/getFriendNotReadMessage/{fUserAccount}")
