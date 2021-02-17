@@ -46,6 +46,15 @@ public class MessageService {
         return messageMapper.getFriendNotReadMessage(userAccount,fUserAccount);
     }
 
+    public List<Message> getMessagesWithFriendByPage(String userAccount, String fUserAccount,Integer page) {
+        return messageMapper.getMessagesWithFriendByPage(userAccount,fUserAccount,page);
+    }
+
+    public Integer getChatMessageCount(String userAccount, String fUserAccount) {
+        return messageMapper.getChatMessageCount(userAccount,fUserAccount);
+    }
+
+
 //    public List<Message> selectAllNotReadMessage(String userAccount) {
 //        List<Message> notReadMessage = messageMapper.selectAllNotReadMessage(userAccount);
 //        return null;

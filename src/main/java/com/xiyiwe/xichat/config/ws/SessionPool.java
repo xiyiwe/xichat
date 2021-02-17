@@ -50,13 +50,17 @@ public class SessionPool {
         //fileUrl未set，为null处理
         Session toUserSession = sessions.get(returnMessage.getReceiverAccount());
         if(toUserSession != null){
-//            returnMessage.setIsRead("1");
-//            messageService.updateById(returnMessage);
+            returnMessage.setIsRead("1");
+            messageService.updateById(returnMessage);
             String toMessage = JSON.toJSONString(returnMessage);
 //            toUserSession.getAsyncRemote().sendText(toMessage);
             toUserSession.getAsyncRemote().sendObject(returnMessage);
             toUserSession = sessions.get(returnMessage.getSenderAccount());
             System.out.println("发送的数据："+returnMessage);
+            toUserSession.getAsyncRemote().sendObject(returnMessage);
+        }else {
+            System.out.println("接收用户不在线，发送的数据："+returnMessage);
+            toUserSession = sessions.get(returnMessage.getSenderAccount());
             toUserSession.getAsyncRemote().sendObject(returnMessage);
         }
 //        for (String sessionId : SessionPool.sessions.keySet()){

@@ -85,4 +85,28 @@ public class FriendController {
         }
         return null;
     }
+    @GetMapping("/friend/getHistoryMessageWithFriendByPage/{fUserAccount}/{page}")
+    List<Message> getHistoryMessageWithFriend(@PathVariable String fUserAccount,@PathVariable Integer page, HttpServletRequest request){
+        if(request.getHeader("Authorization")!=null){
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            return messageService.getMessagesWithFriendByPage(userAccount,fUserAccount,(page-1)*10);
+        }
+        return null;
+    }
+    @GetMapping("/friend/getHistoryMessageCount/{fUserAccount}")
+    Integer getHistoryMessageCount(@PathVariable String fUserAccount, HttpServletRequest request){
+        if(request.getHeader("Authorization")!=null){
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            return messageService.getChatMessageCount(userAccount,fUserAccount);
+        }
+        return null;
+    }
+    @GetMapping("/friend/upload")
+    Integer upload(@PathVariable String fUserAccount, HttpServletRequest request){
+        if(request.getHeader("Authorization")!=null){
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            return messageService.getChatMessageCount(userAccount,fUserAccount);
+        }
+        return null;
+    }
 }

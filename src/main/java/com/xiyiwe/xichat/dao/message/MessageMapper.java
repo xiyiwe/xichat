@@ -17,4 +17,8 @@ public interface MessageMapper extends BaseMapper<Message> {
     void updateFriendNotReadMessage(@Param("receiverAccount") String receiverAccount, @Param("senderAccount")String senderAccount);
 
     List<Message> getFriendNotReadMessage(@Param("receiverAccount") String receiverAccount, @Param("senderAccount")String senderAccount);
+
+    List<Message> getMessagesWithFriendByPage(@Param("receiverAccount") String receiverAccount, @Param("senderAccount")String senderAccount,@Param("page") Integer page);
+
+    Integer getChatMessageCount(@Param("receiverAccount") String receiverAccount, @Param("senderAccount")String senderAccount);
 }
