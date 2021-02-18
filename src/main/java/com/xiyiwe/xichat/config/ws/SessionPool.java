@@ -50,8 +50,8 @@ public class SessionPool {
         //fileUrl未set，为null处理
         Session toUserSession = sessions.get(returnMessage.getReceiverAccount());
         if(toUserSession != null){
-            returnMessage.setIsRead("1");
-            messageService.updateById(returnMessage);
+//            returnMessage.setIsRead("1");
+//            messageService.updateById(returnMessage);
             String toMessage = JSON.toJSONString(returnMessage);
 //            toUserSession.getAsyncRemote().sendText(toMessage);
             toUserSession.getAsyncRemote().sendObject(returnMessage);

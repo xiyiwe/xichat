@@ -69,6 +69,7 @@ public class FriendController {
             return null;
         }
     }
+    //更新单个好友左侧未读信息数量
     @GetMapping("/friend/updateFriendNotReadMessage/{fUserAccount}")
     void getNotReadMessageFromFriend(@PathVariable String fUserAccount,HttpServletRequest request){
         if(request.getHeader("Authorization")!=null){
