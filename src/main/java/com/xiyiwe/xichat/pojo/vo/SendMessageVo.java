@@ -4,18 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendMessageVo {
+public class SendMessageVo implements Serializable {
     String sendMessage;
     String senderAccount;
     String senderName;
     String receiverAccount;
     String receiverName;
-    Date createTime;
     String fileUrl;
-    String isRead;
 }

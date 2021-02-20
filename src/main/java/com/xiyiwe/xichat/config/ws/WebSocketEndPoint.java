@@ -1,8 +1,9 @@
 package com.xiyiwe.xichat.config.ws;
 
-import com.alibaba.fastjson.JSON;
 import com.xiyiwe.xichat.pojo.message.Message;
+import com.xiyiwe.xichat.pojo.vo.SendMessageVo;
 import com.xiyiwe.xichat.service.message.MessageService;
+import com.xiyiwe.xichat.utils.encode.ServerDecoder;
 import com.xiyiwe.xichat.utils.encode.ServerEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,10 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.HashMap;
 
 @Slf4j
 @Component
-@ServerEndpoint(value = "/friendsChat/{userAccount}",encoders = ServerEncoder.class)
+@ServerEndpoint(value = "/friendsChat/{userAccount}",decoders = ServerDecoder.class,encoders = ServerEncoder.class)
 public class WebSocketEndPoint {
 //    public static WebSocketEndPoint webSocketEndPoint;
 //    public MessageService messageService =SpringContextUtil.getContext().getBean(MessageService.class);;
@@ -49,11 +49,16 @@ public class WebSocketEndPoint {
         session.close();
     }
     @OnMessage
-    public void OnMessage(String message,Session session){
+    public void OnMessage(SendMessageVo message, Session session){
         System.out.println(message);
-        HashMap params = JSON.parseObject(message, HashMap.class);
-        Message returnMessage = messageService.insertMessage(params);
+//        HashMap params = JSON.parseObject(message, HashMap.class);
+        Message returnMessage = messageService.insertMessage(message);
         SessionPool.sendMessage(returnMessage);
     }
+//    @OnMessage
+//    public void onMessage(Session session, byte[] message) {
+//        messageService.saveFileFromBytes(message, "C:\\zyz\\tupian\\"+ UUID.randomUUID().toString());
+//        System.out.println("收到2进制流");
+//    }
 
 }

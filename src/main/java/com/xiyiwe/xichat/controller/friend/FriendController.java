@@ -10,12 +10,11 @@ import com.xiyiwe.xichat.service.friend.ChatFriendService;
 import com.xiyiwe.xichat.service.message.MessageService;
 import com.xiyiwe.xichat.service.redisService.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -102,12 +101,8 @@ public class FriendController {
         }
         return null;
     }
-    @GetMapping("/friend/upload")
-    Integer upload(@PathVariable String fUserAccount, HttpServletRequest request){
-        if(request.getHeader("Authorization")!=null){
-            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
-            return messageService.getChatMessageCount(userAccount,fUserAccount);
-        }
-        return null;
+    @RequestMapping(value = "/friend/uploadFile", method = RequestMethod.POST)
+    String upload( @RequestParam("file") MultipartFile file) throws IOException {
+            return messageService.uploadFile(file);
     }
 }

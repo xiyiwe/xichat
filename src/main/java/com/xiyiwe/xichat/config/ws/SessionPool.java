@@ -45,7 +45,7 @@ public class SessionPool {
         }
     }
     public static void sendMessage( Message returnMessage){
-
+        System.err.println("调用了sendMessage");
         //TODO
         //fileUrl未set，为null处理
         Session toUserSession = sessions.get(returnMessage.getReceiverAccount());
