@@ -16,4 +16,6 @@ public class SendMessageVo implements Serializable {
     String receiverAccount;
     String receiverName;
     String fileUrl;
+    String fileName;
+    String fileType;
 }

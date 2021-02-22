@@ -37,13 +37,12 @@ public class MessageService {
         message.setSenderAccount(params.getSenderAccount());
         message.setIsRead("0");
         message.setFileUrl(params.getFileUrl());
-
-//        message.setFileUrl((String) params.get("fileUrl"));
-//        ByteBuf buf = Unpooled.buffer(32);
-//        byte[] file = (params.getFileUrl()).getBytes();
-//        String fileName =  UUID.randomUUID().toString();
-//        saveFileFromBytes(file, "C:\\zyz\\tupian\\"+ fileName);
-//        message.setFileUrl("C:\\zyz\\tupian\\"+fileName);
+        message.setFileName(params.getFileName());
+        if (params.getFileType().contains("image")) {
+            message.setFileType("image");
+        }else{
+            message.setFileType("file");
+        }
         messageMapper.insert(message);
         return message;
     }
@@ -132,8 +131,14 @@ public class MessageService {
 //    }
 
     public String uploadFile(MultipartFile file) throws IOException {
-//        System.out.println(file);
-        String destination = "C:\\zyz\\biyesheji\\xichat\\xichat-vue\\xichat-vue\\src\\assets\\"+  file.getOriginalFilename();
+        System.out.println(file.getContentType());
+        String destination = "";
+            if (file.getContentType().contains("image")){
+                destination = "C:\\zyz\\biyesheji\\xichat\\xichat-vue\\xichat-vue\\public\\static\\images\\"+ file.getOriginalFilename();
+            }
+        else{
+            destination = "C:\\zyz\\biyesheji\\xichat\\xichat-vue\\xichat-vue\\public\\static\\files\\"+ file.getOriginalFilename();
+        }
         File file1 = new File(destination);
         file.transferTo(file1);
         return "上传成功";

@@ -24,4 +24,6 @@ public class Message implements Serializable {
     String receiverName;
     String fileUrl;
     String isRead;
+    String fileName;
+    String fileType;
 }
