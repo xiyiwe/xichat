@@ -1,17 +1,21 @@
 package com.xiyiwe.xichat.service.message;
 
+import com.xiyiwe.xichat.dao.group.GroupMapper;
 import com.xiyiwe.xichat.dao.message.MessageMapper;
+import com.xiyiwe.xichat.dao.user.UserMapper;
+import com.xiyiwe.xichat.pojo.group.Group;
 import com.xiyiwe.xichat.pojo.message.Message;
+import com.xiyiwe.xichat.pojo.user.SimpleUserInfo;
+import com.xiyiwe.xichat.pojo.user.User;
 import com.xiyiwe.xichat.pojo.vo.SendMessageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,18 +23,18 @@ import java.util.UUID;
 public class MessageService {
     @Autowired
     MessageMapper messageMapper;
+    @Autowired
+    UserMapper userMapper;
+    @Autowired
+    GroupMapper groupMapper;
 
-//    public Message insertMessage(HashMap<String,Object> params) {
+    //    public Message insertMessage(HashMap<String,Object> params) {
     public Message insertMessage(SendMessageVo params) {
         Message message = new Message();
+
         message.setMessageId(UUID.randomUUID().toString());
-//        message.setMessageContent((String) params.get("sendMessage"));
         message.setMessageContent(params.getSendMessage());
         message.setCreateTime(new Timestamp(System.currentTimeMillis()));
-//        message.setReceiverAccount((String) params.get("receiverAccount"));
-//        message.setReceiverName((String) params.get("receiverName"));
-//        message.setSenderName((String) params.get("senderName"));
-//        message.setSenderAccount((String) params.get("senderAccount"));
         message.setReceiverAccount((params.getReceiverAccount()));
         message.setReceiverName(params.getReceiverName());
         message.setSenderName(params.getSenderName());
@@ -40,10 +44,46 @@ public class MessageService {
         message.setFileName(params.getFileName());
         if (params.getFileType().contains("image")) {
             message.setFileType("image");
-        }else{
+        }  else if(!params.getFileUrl().equals("")){
             message.setFileType("file");
+        }else{
+            message.setFileType("");
         }
-        messageMapper.insert(message);
+        message.setIsGroup("0");
+    //如果是group信息
+       if(params.getGroupId()!=null)
+    {
+        List<SimpleUserInfo> receiverList = this.getGroupUsersByGroupId(params.getGroupId());
+        List<Message> messageList = new LinkedList<>();
+        for (SimpleUserInfo simpleUserInfo : receiverList) {
+            Message message1 = new Message();
+            message1.setMessageId(UUID.randomUUID().toString());
+            message1.setMessageContent(params.getSendMessage());
+            message1.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            message1.setSenderName(params.getSenderName());
+            message1.setSenderAccount(params.getSenderAccount());
+            message1.setIsRead("0");
+            message1.setFileUrl(params.getFileUrl());
+            message1.setFileName(params.getFileName());
+            if (params.getFileType().contains("image")) {
+                message1.setFileType("image");
+            } else if(!params.getFileUrl().equals("")){
+                message1.setFileType("file");
+            }else{
+                message1.setFileType("");
+            }
+            message1.setIsGroup("1");
+            message1.setGroupId(params.getGroupId());
+            message1.setReceiverAccount(simpleUserInfo.getUserAccount());
+            message1.setReceiverName(simpleUserInfo.getUserName());
+            messageList.add(message1);
+        }
+        messageMapper.insertGroupMessage(messageList);
+    }else {
+           messageMapper.insert(message);
+           return message;
+       }
+       message.setIsGroup("1");
         return message;
     }
 
@@ -71,64 +111,7 @@ public class MessageService {
         return messageMapper.getChatMessageCount(userAccount,fUserAccount);
     }
 
-//    public static void main(String[] args) {
-//        saveFileFromBytes
-//    }
-    public static boolean saveFileFromBytes(byte[] b, String outputFile)
-    {
-        BufferedOutputStream stream = null;
-        File file = null;
-        try
-        {
-            file = new File(outputFile);
-            FileOutputStream fstream = new FileOutputStream(file);
-            stream = new BufferedOutputStream(fstream);
-            stream.write(b);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-        finally
-        {
-            if (stream != null)
-            {
-                try
-                {
-                    stream.close();
-                }
-                catch (IOException e1)
-                {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        return true;
-    }
 
-//    public Message insertMessageWithFile(SendMessageVo sendMessageVo) throws IOException {
-//        System.out.println(sendMessageVo);
-//        Message message = new Message();
-//        message.setMessageId(UUID.randomUUID().toString());
-//        message.setMessageContent(sendMessageVo.getSendMessage());
-//        message.setCreateTime(new Timestamp(System.currentTimeMillis()));
-//        message.setReceiverAccount(sendMessageVo.getReceiverAccount());
-//        message.setReceiverName(sendMessageVo.getReceiverName());
-//        message.setSenderName(sendMessageVo.getSenderName());
-//        message.setSenderAccount(sendMessageVo.getSenderAccount());
-//        message.setIsRead("0");
-//        MultipartFile file = sendMessageVo.getFileUrl();
-//        System.out.println(file.getOriginalFilename());
-//        String destination = "C:\\zyz\\tupian "+  file.getOriginalFilename()+"_"+UUID.randomUUID();
-//        File file1 = new File(destination);
-//        file.transferTo(file1);
-//        message.setFileUrl(destination);
-////        Session toUserSession = SessionPool.sessions.get(message.getReceiverAccount());
-//            SessionPool.sendMessage(message);
-//
-//        return null;
-//    }
 
     public String uploadFile(MultipartFile file) throws IOException {
         System.out.println(file.getContentType());
@@ -142,6 +125,38 @@ public class MessageService {
         File file1 = new File(destination);
         file.transferTo(file1);
         return "上传成功";
+    }
+    public String isUserOrGroup(String receiverId){
+        User user = userMapper.selectByUserAccount(receiverId);
+        if(user!=null){
+            return "user";
+        }
+        Group group = groupMapper.selectById(receiverId);
+        if(group!=null){
+            return "group";
+        }
+        return null;
+    }
+
+    public List<SimpleUserInfo> getGroupUsersByGroupId(String groupId) {
+        List<SimpleUserInfo> users = groupMapper.getGroupUsersByGroupId(groupId);
+        return users;
+    }
+
+    public List<Message> getGroupNotReadMessage(String userAccount, String groupId) {
+        return messageMapper.selectGroupNotReadMessage(userAccount,groupId);
+    }
+
+    public void updateGroupNotReadMessage(String userAccount, String groupId) {
+        messageMapper.updateGroupNotReadMessage(userAccount, groupId);
+    }
+
+    public List<Message> getHistoryMessageWithGroupByPage(String userAccount, String groupId, int i) {
+        return messageMapper.getMessagesWithGroupByPage(userAccount,groupId,i);
+    }
+
+    public Integer getHistoryMessageCount(String userAccount, String groupId) {
+        return messageMapper.getGroupMessageCount(userAccount,groupId);
     }
 //    public List<Message> selectAllNotReadMessage(String userAccount) {
 //        List<Message> notReadMessage = messageMapper.selectAllNotReadMessage(userAccount);

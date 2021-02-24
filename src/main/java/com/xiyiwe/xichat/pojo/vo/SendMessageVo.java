@@ -18,4 +18,6 @@ public class SendMessageVo implements Serializable {
     String fileUrl;
     String fileName;
     String fileType;
+    String isGroup;
+    String groupId;
 }

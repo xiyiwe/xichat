@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiyiwe.xichat.dao.group.GroupMapper">
+
+    <select id="getGroupUsersByGroupId" resultType="com.xiyiwe.xichat.pojo.user.SimpleUserInfo">
+        select userinfo.userAccount,userinfo.userName from userinfo,usergroup
+        where userinfo.userAccount = usergroup.userAccount
+          and usergroup.groupId = #{groupId}
+    </select>
+    <select id="selectGroupsByUserAccount" resultType="com.xiyiwe.xichat.pojo.group.Group">
+        select chatgroup.groupId,chatgroup.groupName from chatgroup,usergroup
+        where usergroup.userAccount = #{userAccount} and usergroup.groupId = chatgroup.groupId
+    </select>
+
+</mapper>

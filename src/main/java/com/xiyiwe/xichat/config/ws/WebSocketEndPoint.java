@@ -55,10 +55,6 @@ public class WebSocketEndPoint {
         Message returnMessage = messageService.insertMessage(message);
         SessionPool.sendMessage(returnMessage);
     }
-//    @OnMessage
-//    public void onMessage(Session session, byte[] message) {
-//        messageService.saveFileFromBytes(message, "C:\\zyz\\tupian\\"+ UUID.randomUUID().toString());
-//        System.out.println("收到2进制流");
-//    }
+
 
 }

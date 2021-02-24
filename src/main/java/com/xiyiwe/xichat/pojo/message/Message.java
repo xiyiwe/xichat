@@ -26,4 +26,6 @@ public class Message implements Serializable {
     String isRead;
     String fileName;
     String fileType;
+    String isGroup;
+    String groupId;
 }

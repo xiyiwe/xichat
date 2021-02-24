@@ -1,29 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiyiwe.xichat.dao.message.MessageMapper">
+    <insert id="insertGroupMessage" parameterType="java.util.List">
+        insert into message(messageId,messageContent,createTime,senderAccount,senderName,receiverAccount,receiverName,fileUrl,isRead,fileName,fileType,isGroup,groupId)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+         #{item.messageId,jdbcType=VARCHAR},
+         #{item.messageContent,jdbcType=VARCHAR},
+         #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.senderAccount,jdbcType=VARCHAR},
+        #{item.senderName,jdbcType=VARCHAR},
+        #{item.receiverAccount,jdbcType=VARCHAR},
+        #{item.receiverName,jdbcType=VARCHAR},
+        #{item.fileUrl,jdbcType=VARCHAR},
+        #{item.isRead,jdbcType=VARCHAR},
+        #{item.fileName,jdbcType=VARCHAR},
+        #{item.fileType,jdbcType=VARCHAR},
+        #{item.isGroup,jdbcType=VARCHAR},
+        #{item.groupId,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
     <update id="updateFriendNotReadMessage">
-        update message set isRead = '1' where receiverAccount = #{receiverAccount} and senderAccount = #{senderAccount}
+        update message set isRead = '1'
+        where receiverAccount = #{receiverAccount}
+          and senderAccount = #{senderAccount}
+          and isGroup='0'
+    </update>
+
+    <update id="updateGroupNotReadMessage">
+        update message set isRead = '1'
+        where receiverAccount = #{receiverAccount}
+          and isGroup = '1'
+          and isRead = '0'
+          and groupId = #{groupId}
     </update>
 
     <select id="selectPageFriendMessagesByUserAccount" resultType="com.xiyiwe.xichat.pojo.message.Message">
-        select * from message where senderAccount = #{senderAccount} and receiverAccount = #{receiverAccount} limit page,10 order by createTime DESC
+        select * from message where senderAccount = #{senderAccount}
+         and receiverAccount = #{receiverAccount}
+         and isGroup='0'
+         limit page,10
+        order by createTime DESC
     </select>
+
+    <select id="selectPageGroupMessagesByUserAccount" resultType="com.xiyiwe.xichat.pojo.message.Message">
+        select * from message where
+                                receiverAccount = #{receiverAccount}
+                                and isGroup='1'
+                                and groupId=#{groupId}
+            limit page,10
+        order by createTime DESC
+    </select>
+
     <select id="getFriendNotReadMessage" resultType="com.xiyiwe.xichat.pojo.message.Message">
         select * from message
-        where receiverAccount = #{receiverAccount} and senderAccount = #{senderAccount} and isRead = '0'
+        where receiverAccount = #{receiverAccount} and senderAccount = #{senderAccount}
+        and isRead = '0'
+        and isGroup='0'
         order by createTime
-
     </select>
+
     <select id="getMessagesWithFriendByPage" resultType="com.xiyiwe.xichat.pojo.message.Message">
         select * from message
-        where receiverAccount = #{receiverAccount} and senderAccount = #{senderAccount}
-        or receiverAccount = #{senderAccount} and senderAccount = #{receiverAccount}
+        where receiverAccount = (#{receiverAccount} and senderAccount = #{senderAccount}
+        or receiverAccount = #{senderAccount} and senderAccount = #{receiverAccount})
+        and isGroup='0'
         order by createTime
         limit #{page},10
     </select>
+    <select id="getMessagesWithGroupByPage" resultType="com.xiyiwe.xichat.pojo.message.Message">
+        select * from message
+        where
+        receiverAccount = #{receiverAccount}
+        and isGroup='1'
+        and groupId = #{groupId}
+        order by createTime
+            limit #{page},10
+    </select>
+
+    <select id="selectGroupNotReadMessage" resultType="com.xiyiwe.xichat.pojo.message.Message">
+        select * from message
+        where receiverAccount = #{receiverAccount}
+        and isRead = '0'
+        and isGroup='1'
+        and groupId=#{groupId}
+        order by createTime
+    </select>
     <select id="getChatMessageCount" resultType="java.lang.Integer">
         select count(*) from message
-        where receiverAccount = #{receiverAccount} and senderAccount = #{senderAccount}
-        or receiverAccount = #{senderAccount} and senderAccount = #{receiverAccount}
+        where receiverAccount = (#{receiverAccount} and senderAccount = #{senderAccount}
+            or receiverAccount = #{senderAccount} and senderAccount = #{receiverAccount})
+          and isGroup='0'
+    </select>
+    <select id="getGroupMessageCount" resultType="java.lang.Integer">
+        select count(*) from message
+        where
+            receiverAccount = #{receiverAccount}
+            and isGroup='1'
+            and groupId=#{groupId}
+    </select>
+    <select id="getFriendNotReadMessageCount" resultType="java.lang.Integer">
+        select count(*) from message
+        where receiverAccount = #{receiverAccount}
+          and senderAccount = #{senderAccount}
+          and isRead = '0'
+          and isGroup='0'
+    </select>
+    <select id="getGroupNotReadMessageCount" resultType="java.lang.Integer">
+        select count(*) from message
+        where receiverAccount = #{receiverAccount}
+          and isRead = '0'
+          and isGroup='1'
+          and groupId=#{groupId}
     </select>
 </mapper>
