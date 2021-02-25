@@ -29,4 +29,9 @@ public class ChatFriendService {
         }
         return friendAndNotReadMessageCountList;
     }
+
+    public void deleteFriend(String userAccount, String fUserAccount) {
+
+        chatFriendMapper.deleteFriend(userAccount,fUserAccount);
+    }
 }

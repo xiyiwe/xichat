@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-@ServerEndpoint(value = "/friendsChat/{userAccount}",decoders = ServerDecoder.class,encoders = ServerEncoder.class)
+@ServerEndpoint(value = "/chat/{userAccount}",decoders = ServerDecoder.class,encoders = ServerEncoder.class)
 public class WebSocketEndPoint {
 //    public static WebSocketEndPoint webSocketEndPoint;
 //    public MessageService messageService =SpringContextUtil.getContext().getBean(MessageService.class);;
@@ -31,6 +31,7 @@ public class WebSocketEndPoint {
     public void init(){
         messageService = messageService2;
     }
+    //建立连接接口
     @OnOpen
     public void onOpen(Session session, @PathParam("userAccount") String userAccount) {
         SessionPool.sessions.put(userAccount,session);
@@ -42,12 +43,14 @@ public class WebSocketEndPoint {
 //        // 发送上线通知
 //        sendInfo(sid, userId, onlineUserList.size(), "上线了~");
     }
+    //关闭连接接口
     @OnClose
     public void onClose(Session session) throws IOException {
         System.out.println("调用了OnClose");
         SessionPool.close(session.getId());
         session.close();
     }
+    //发送消息接口
     @OnMessage
     public void OnMessage(SendMessageVo message, Session session){
         System.out.println(message);

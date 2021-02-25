@@ -63,4 +63,7 @@ public class GroupService {
         userGroupMapper.insert(userGroup);
     }
 
+    public void quitGroup(String userAccount, String groupId) {
+        userGroupMapper.quitGroup(userAccount,groupId);
+    }
 }

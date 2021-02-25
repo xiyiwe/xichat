@@ -6,10 +6,7 @@ import com.xiyiwe.xichat.service.group.GroupService;
 import com.xiyiwe.xichat.service.message.MessageService;
 import com.xiyiwe.xichat.service.redisService.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -24,7 +21,7 @@ public class GroupController {
     RedisService redisService;
     @Autowired
     MessageService messageService;
-
+    //添加群组
     @PostMapping("/group/addgroup/{groupName}")
     Map<String, String> addGroup(@PathVariable String groupName, HttpServletRequest request) {
         Map<String, String> returnData = new HashMap<>();
@@ -39,6 +36,7 @@ public class GroupController {
         returnData.put("msg","ok");
         return returnData;
     }
+    //加入群组
     @PostMapping("/group/joingroup/{groupId}")
     Map<String, String> joingroup(@PathVariable String groupId, HttpServletRequest request){
         Map<String, String> returnData = new HashMap<>();
@@ -95,6 +93,7 @@ public class GroupController {
         }
         return null;
     }
+    //分页查询与单个群组聊天历史记录
     @GetMapping("/group/getHistoryMessageWithGroupByPage/{groupId}/{page}")
     List<Message> getHistoryMessageWithGroupByPage(@PathVariable String groupId,@PathVariable Integer page, HttpServletRequest request){
         if(request.getHeader("Authorization")!=null){
@@ -103,6 +102,7 @@ public class GroupController {
         }
         return null;
     }
+    //获取单个群组聊天历史记录数量
     @GetMapping("/group/getGroupHistoryMessageCount/{groupId}")
     Integer getHistoryMessageCount(@PathVariable String groupId, HttpServletRequest request){
         if(request.getHeader("Authorization")!=null){
@@ -110,5 +110,13 @@ public class GroupController {
             return messageService.getHistoryMessageCount(userAccount,groupId);
         }
         return null;
+    }
+    @RequestMapping("/group/quitGroup/{groupId}")
+    void deleteFriend(@PathVariable String groupId,HttpServletRequest request)
+    {
+        if(request.getHeader("Authorization")!=null){
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            groupService.quitGroup(userAccount,groupId);
+        }
     }
 }

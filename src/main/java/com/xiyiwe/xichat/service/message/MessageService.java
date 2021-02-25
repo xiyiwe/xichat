@@ -84,6 +84,7 @@ public class MessageService {
            return message;
        }
        message.setIsGroup("1");
+       message.setGroupId(params.getGroupId());
         return message;
     }
 
@@ -158,6 +159,7 @@ public class MessageService {
     public Integer getHistoryMessageCount(String userAccount, String groupId) {
         return messageMapper.getGroupMessageCount(userAccount,groupId);
     }
+
 //    public List<Message> selectAllNotReadMessage(String userAccount) {
 //        List<Message> notReadMessage = messageMapper.selectAllNotReadMessage(userAccount);
 //        return null;

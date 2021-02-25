@@ -32,10 +32,18 @@ public class FriendController {
     MessageService messageService;
     @Autowired
     UserMapper userMapper;
+    //添加朋友
     @PostMapping(value = "/friend/addfriend/{userAccount}", produces = "application/json;charset=UTF-8")
     Map<String, String> addFriend(@PathVariable String userAccount, HttpServletRequest request){
-        User user = userMapper.selectByUserAccount(userAccount);
         Map<String, String> returnData = new HashMap<>();
+        if(request.getHeader("Authorization")!=null){
+            String myAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            if (myAccount.equals(userAccount)){
+                returnData.put("msg","不能添加自己");
+                return returnData;
+            }
+        }
+        User user = userMapper.selectByUserAccount(userAccount);
         if(user==null){
             returnData.put("msg","不存在该用户账号");
             return returnData;
@@ -85,6 +93,7 @@ public class FriendController {
         }
         return null;
     }
+    //分页查询与单个好友聊天历史记录
     @GetMapping("/friend/getHistoryMessageWithFriendByPage/{fUserAccount}/{page}")
     List<Message> getHistoryMessageWithFriend(@PathVariable String fUserAccount,@PathVariable Integer page, HttpServletRequest request){
         if(request.getHeader("Authorization")!=null){
@@ -93,6 +102,7 @@ public class FriendController {
         }
         return null;
     }
+    //获取单个好友聊天历史记录数量
     @GetMapping("/friend/getHistoryMessageCount/{fUserAccount}")
     Integer getHistoryMessageCount(@PathVariable String fUserAccount, HttpServletRequest request){
         if(request.getHeader("Authorization")!=null){
@@ -101,8 +111,17 @@ public class FriendController {
         }
         return null;
     }
+    //上传文件
     @RequestMapping(value = "/friend/uploadFile", method = RequestMethod.POST)
     String upload( @RequestParam("file") MultipartFile file) throws IOException {
             return messageService.uploadFile(file);
+    }
+    @RequestMapping("/friend/deleteFriend/{fUserAccount}")
+    void deleteFriend(@PathVariable String fUserAccount,HttpServletRequest request)
+    {
+        if(request.getHeader("Authorization")!=null){
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            chatFriendService.deleteFriend(userAccount,fUserAccount);
+        }
     }
 }
