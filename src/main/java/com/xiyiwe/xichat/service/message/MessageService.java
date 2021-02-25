@@ -8,6 +8,7 @@ import com.xiyiwe.xichat.pojo.message.Message;
 import com.xiyiwe.xichat.pojo.user.SimpleUserInfo;
 import com.xiyiwe.xichat.pojo.user.User;
 import com.xiyiwe.xichat.pojo.vo.SendMessageVo;
+import com.xiyiwe.xichat.utils.secret.desc.DescUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,7 +59,8 @@ public class MessageService {
         for (SimpleUserInfo simpleUserInfo : receiverList) {
             Message message1 = new Message();
             message1.setMessageId(UUID.randomUUID().toString());
-            message1.setMessageContent(params.getSendMessage());
+            //加密信息
+            message1.setMessageContent(DescUtil.encrypt(params.getSendMessage()));
             message1.setCreateTime(new Timestamp(System.currentTimeMillis()));
             message1.setSenderName(params.getSenderName());
             message1.setSenderAccount(params.getSenderAccount());
@@ -80,7 +82,9 @@ public class MessageService {
         }
         messageMapper.insertGroupMessage(messageList);
     }else {
+           message.setMessageContent(DescUtil.encrypt(params.getSendMessage()));
            messageMapper.insert(message);
+           message.setMessageContent(params.getSendMessage());
            return message;
        }
        message.setIsGroup("1");
@@ -101,11 +105,22 @@ public class MessageService {
     }
 
     public List<Message> getFriendNotReadMessage(String userAccount, String fUserAccount) {
-        return messageMapper.getFriendNotReadMessage(userAccount,fUserAccount);
+        List<Message> messagesList = messageMapper.getFriendNotReadMessage(userAccount, fUserAccount);
+        messagesList.forEach((message)->{
+            message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
+        });
+        return messagesList;
     }
 
     public List<Message> getMessagesWithFriendByPage(String userAccount, String fUserAccount,Integer page) {
-        return messageMapper.getMessagesWithFriendByPage(userAccount,fUserAccount,page);
+        List<Message> messagesList = messageMapper.getMessagesWithFriendByPage(userAccount, fUserAccount, page);
+        messagesList.forEach((message)->{
+            message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
+        });
+//        for (Message message : messagesList) {
+//            message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
+//        }
+        return messagesList;
     }
 
     public Integer getChatMessageCount(String userAccount, String fUserAccount) {
@@ -145,6 +160,10 @@ public class MessageService {
     }
 
     public List<Message> getGroupNotReadMessage(String userAccount, String groupId) {
+        List<Message> messagesList = messageMapper.selectGroupNotReadMessage(userAccount, groupId);
+        messagesList.forEach((message)->{
+            message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
+        });
         return messageMapper.selectGroupNotReadMessage(userAccount,groupId);
     }
 
@@ -153,7 +172,11 @@ public class MessageService {
     }
 
     public List<Message> getHistoryMessageWithGroupByPage(String userAccount, String groupId, int i) {
-        return messageMapper.getMessagesWithGroupByPage(userAccount,groupId,i);
+        List<Message> messagesList = messageMapper.getMessagesWithGroupByPage(userAccount, groupId, i);
+        messagesList.forEach((message)->{
+            message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
+        });
+        return messagesList;
     }
 
     public Integer getHistoryMessageCount(String userAccount, String groupId) {
