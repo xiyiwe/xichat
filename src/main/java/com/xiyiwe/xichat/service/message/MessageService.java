@@ -164,7 +164,7 @@ public class MessageService {
         messagesList.forEach((message)->{
             message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
         });
-        return messageMapper.selectGroupNotReadMessage(userAccount,groupId);
+        return messagesList;
     }
 
     public void updateGroupNotReadMessage(String userAccount, String groupId) {
