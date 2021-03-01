@@ -9,10 +9,7 @@ import com.xiyiwe.xichat.utils.secret.AesUtil;
 import com.xiyiwe.xichat.utils.secret.desc.DescUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -28,6 +25,7 @@ public class LoginController {
     @Autowired
     RedisService redisService;
     @RequestMapping(value = "/login", produces = "application/json;charset=UTF-8")
+    @ResponseBody
     Map<String, String> login(@RequestBody LoginInfo loginInfo) throws Exception {
         System.out.println(loginInfo);
 //        System.out.println(AesUtil.aesDecrypt(loginInfo.getUserAccount(),"1234567890ABCDEF"));
