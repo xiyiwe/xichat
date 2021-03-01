@@ -41,7 +41,11 @@ public class UserController {
         }
 //        user.setUserName(simpleUserInfo.getUserName());
 //        user.setUserAccount(simpleUserInfo.getUserAccount());
-        user.setPassword( DescUtil.encrypt(AesUtil.aesDecrypt( user.getPassword(),"1234567890ABCDEF")));
+        if(user.getPassword()!=null&&!user.getPassword().equals("")){
+            user.setPassword( DescUtil.encrypt(AesUtil.aesDecrypt( user.getPassword(),"1234567890ABCDEF")));
+        }else{
+            user.setPassword(null);
+        }
         userMapper.updateById(user);
         return "ok";
 

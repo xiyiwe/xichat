@@ -63,7 +63,7 @@
 
     <select id="getMessagesWithFriendByPage" resultType="com.xiyiwe.xichat.pojo.message.Message">
         select * from message
-        where receiverAccount = (#{receiverAccount} and senderAccount = #{senderAccount}
+        where (receiverAccount = #{receiverAccount} and senderAccount = #{senderAccount}
         or receiverAccount = #{senderAccount} and senderAccount = #{receiverAccount})
         and isGroup='0'
         order by createTime
@@ -89,7 +89,7 @@
     </select>
     <select id="getChatMessageCount" resultType="java.lang.Integer">
         select count(*) from message
-        where receiverAccount = (#{receiverAccount} and senderAccount = #{senderAccount}
+        where (receiverAccount = #{receiverAccount} and senderAccount = #{senderAccount}
             or receiverAccount = #{senderAccount} and senderAccount = #{receiverAccount})
           and isGroup='0'
     </select>
