@@ -65,7 +65,8 @@ public class MessageService {
             message1.setSenderName(params.getSenderName());
             message1.setSenderAccount(params.getSenderAccount());
             message1.setIsRead("0");
-            message1.setFileUrl(params.getFileUrl());
+            message1.setFileUrl(DescUtil.encrypt(params.getFileUrl()));
+//            message1.setFileUrl(params.getFileUrl());
             message1.setFileName(params.getFileName());
             if (params.getFileType().contains("image")) {
                 message1.setFileType("image");
@@ -83,8 +84,10 @@ public class MessageService {
         messageMapper.insertGroupMessage(messageList);
     }else {
            message.setMessageContent(DescUtil.encrypt(params.getSendMessage()));
+           message.setFileUrl(DescUtil.encrypt(params.getFileUrl()));
            messageMapper.insert(message);
            message.setMessageContent(params.getSendMessage());
+           message.setFileUrl(params.getFileUrl());
            return message;
        }
        message.setIsGroup("1");
@@ -108,6 +111,7 @@ public class MessageService {
         List<Message> messagesList = messageMapper.getFriendNotReadMessage(userAccount, fUserAccount);
         messagesList.forEach((message)->{
             message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
+            message.setFileUrl(DescUtil.decrypt(message.getFileUrl()));
         });
         return messagesList;
     }
@@ -116,7 +120,8 @@ public class MessageService {
         List<Message> messagesList = messageMapper.getMessagesWithFriendByPage(userAccount, fUserAccount, page);
         messagesList.forEach((message)->{
             message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
-        });
+            message.setFileUrl(DescUtil.decrypt(message.getFileUrl()));
+       });
 //        for (Message message : messagesList) {
 //            message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
 //        }
@@ -163,6 +168,7 @@ public class MessageService {
         List<Message> messagesList = messageMapper.selectGroupNotReadMessage(userAccount, groupId);
         messagesList.forEach((message)->{
             message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
+            message.setFileUrl(DescUtil.decrypt(message.getFileUrl()));
         });
         return messagesList;
     }
@@ -175,6 +181,7 @@ public class MessageService {
         List<Message> messagesList = messageMapper.getMessagesWithGroupByPage(userAccount, groupId, i);
         messagesList.forEach((message)->{
             message.setMessageContent(DescUtil.decrypt(message.getMessageContent()));
+            message.setFileUrl(DescUtil.decrypt(message.getFileUrl()));
         });
         return messagesList;
     }

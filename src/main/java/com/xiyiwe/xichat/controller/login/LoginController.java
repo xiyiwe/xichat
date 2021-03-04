@@ -19,55 +19,75 @@ import java.util.Map;
 @RestController
 public class LoginController {
     @Autowired
-    RedisTemplate<String,Object> redisTemplate;
+    RedisTemplate<String, Object> redisTemplate;
     @Autowired
     UserMapper userMapper;
     @Autowired
     RedisService redisService;
+
     @RequestMapping(value = "/login", produces = "application/json;charset=UTF-8")
     @ResponseBody
     Map<String, String> login(@RequestBody LoginInfo loginInfo) throws Exception {
         System.out.println(loginInfo);
 //        System.out.println(AesUtil.aesDecrypt(loginInfo.getUserAccount(),"1234567890ABCDEF"));
 //        System.out.println(AesUtil.aesDecrypt(loginInfo.getPassword(),"1234567890ABCDEF"));
-        String userAccount = AesUtil.aesDecrypt(loginInfo.getUserAccount(),"1234567890ABCDEF");
+        String userAccount = AesUtil.aesDecrypt(loginInfo.getUserAccount(), "1234567890ABCDEF");
         User rightUser = userMapper.selectByUserAccount(userAccount);
         Map<String, String> returnData = new HashMap<String, String>();
-        if(rightUser!=null){
-            if(DescUtil.decrypt(rightUser.getPassword()).equals(AesUtil.aesDecrypt(loginInfo.getPassword(),"1234567890ABCDEF"))){
+        if (rightUser != null) {
+            if (DescUtil.decrypt(rightUser.getPassword()).equals(AesUtil.aesDecrypt(loginInfo.getPassword(), "1234567890ABCDEF"))) {
                 SimpleUserInfo simpleUserInfo = new SimpleUserInfo();
                 simpleUserInfo.setUserAccount(userAccount);
                 simpleUserInfo.setUserName(rightUser.getUserName());
                 String token = redisService.initUserInfoToCache(simpleUserInfo);
-                returnData.put("token",token);
-                returnData.put("msg","ok");
-                returnData.put("userName",rightUser.getUserName());
-                returnData.put("userAccount",rightUser.getUserAccount());
+                returnData.put("token", token);
+                returnData.put("msg", "ok");
+                returnData.put("userName", rightUser.getUserName());
+                returnData.put("userAccount", rightUser.getUserAccount());
                 return returnData;
-            }else{
-                returnData.put("msg","密码错误");
+            } else {
+                returnData.put("msg", "密码错误");
                 return returnData;
             }
-        }else{
-            returnData.put("msg","用户名不存在");
+        } else {
+            returnData.put("msg", "用户名不存在");
             return returnData;
         }
 //        AESCoder aesCoder = new AESCoder();
 //        aesCoder.decrypt(loginInfo.getUserAccount());
 //        aesCoder.decrypt(loginInfo.getPassword());
     }
+
     @GetMapping("/logout")
-    void logout(HttpServletRequest request){
-        if(request.getHeader("Authorization")!=null){
+    void logout(HttpServletRequest request) {
+        if (request.getHeader("Authorization") != null) {
             redisTemplate.delete(request.getHeader("Authorization"));
         }
     }
+
     @GetMapping("/testredis")
-    void testMethod(){
+    void testMethod() {
         SimpleUserInfo simpleUserInfo = new SimpleUserInfo();
         simpleUserInfo.setUserName("朱彦喆");
         simpleUserInfo.setUserAccount("张三");
         redisService.setUserInfo("123", simpleUserInfo);
         redisService.getUserInfo("123");
+    }
+
+    @GetMapping("/checkToken")
+    Map<String, String> checkToken(HttpServletRequest request) {
+        Map<String, String> returnData = new HashMap<>();
+        try {
+            if (redisService.getUserInfo(request.getHeader("Authorization")) != null) {
+                returnData.put("msg", "ok");
+                return returnData;
+            }else{
+                returnData.put("msg", "请重新登录");
+                return returnData;
+            }
+        } catch (Exception e) {
+            returnData.put("msg", "请重新登录");
+            return returnData;
+        }
     }
 }
