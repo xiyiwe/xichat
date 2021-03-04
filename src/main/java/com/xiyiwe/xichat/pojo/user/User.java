@@ -15,4 +15,5 @@ public class User implements Serializable {
     String userName;
     String password;
     String userImg;
+    String state;
 }

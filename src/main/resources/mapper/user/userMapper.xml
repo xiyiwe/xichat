@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiyiwe.xichat.dao.user.UserMapper">
+    <update id="updateUserStateOnline">
+        update userinfo set state = '1' where userAccount=#{userAccount}
+    </update>
+    <update id="updateUserStateOffOnline">
+        update userinfo set state = '0' where userAccount=#{userAccount}
+    </update>
 
     <select id="selectByUserAccount" resultType="com.xiyiwe.xichat.pojo.user.User">
         select * from userinfo where userAccount = #{userAccount}

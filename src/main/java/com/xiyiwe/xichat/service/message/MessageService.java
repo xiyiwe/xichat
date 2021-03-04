@@ -28,6 +28,10 @@ public class MessageService {
     UserMapper userMapper;
     @Autowired
     GroupMapper groupMapper;
+//    @Value("${file.filePath}")
+//    String filePath;
+//    @Value("${file.imagePath}")
+//    String imagePath;
 
     //    public Message insertMessage(HashMap<String,Object> params) {
     public Message insertMessage(SendMessageVo params) {

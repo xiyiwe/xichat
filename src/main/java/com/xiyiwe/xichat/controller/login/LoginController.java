@@ -5,6 +5,7 @@ import com.xiyiwe.xichat.pojo.login.LoginInfo;
 import com.xiyiwe.xichat.pojo.user.SimpleUserInfo;
 import com.xiyiwe.xichat.pojo.user.User;
 import com.xiyiwe.xichat.service.redisService.RedisService;
+import com.xiyiwe.xichat.service.user.UserService;
 import com.xiyiwe.xichat.utils.secret.AesUtil;
 import com.xiyiwe.xichat.utils.secret.desc.DescUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class LoginController {
     UserMapper userMapper;
     @Autowired
     RedisService redisService;
+    @Autowired
+    UserService userService;
 
     @RequestMapping(value = "/login", produces = "application/json;charset=UTF-8")
     @ResponseBody
@@ -61,8 +64,11 @@ public class LoginController {
     @GetMapping("/logout")
     void logout(HttpServletRequest request) {
         if (request.getHeader("Authorization") != null) {
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            userService.updateUserStateOffOnline(userAccount);
             redisTemplate.delete(request.getHeader("Authorization"));
         }
+
     }
 
     @GetMapping("/testredis")

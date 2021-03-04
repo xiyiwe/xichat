@@ -66,7 +66,7 @@ public class FriendController {
             return returnData;
         }
     }
-    //查询所有好友发来的未读消息数量和好友信息
+    //查询所有好友发来的未读消息数量和好友信息和在线状态
     @GetMapping("/friend/getUserFriendsAndNotReadMessage")
     List<FriendAndNotReadMessageCount> getUserFriends(HttpServletRequest request){
         if(request.getHeader("Authorization")!=null){

@@ -26,6 +26,7 @@ public class RegisterController {
             userAdd.setPassword(DescUtil.encrypt(password));
             userAdd.setUserName(user.getUserName());
             userAdd.setUserImg("");
+            userAdd.setState("0");
 //            userAdd.setUserId(UUID.randomUUID().toString());
             userMapper.insert(userAdd);
             return "ok";

@@ -3,6 +3,7 @@ package com.xiyiwe.xichat.config.ws;
 import com.xiyiwe.xichat.pojo.message.Message;
 import com.xiyiwe.xichat.pojo.vo.SendMessageVo;
 import com.xiyiwe.xichat.service.message.MessageService;
+import com.xiyiwe.xichat.service.user.UserService;
 import com.xiyiwe.xichat.utils.encode.ServerDecoder;
 import com.xiyiwe.xichat.utils.encode.ServerEncoder;
 import lombok.extern.slf4j.Slf4j;
@@ -25,16 +26,24 @@ public class WebSocketEndPoint {
 //    public static WebSocketEndPoint webSocketEndPoint;
 //    public MessageService messageService =SpringContextUtil.getContext().getBean(MessageService.class);;
     public static MessageService messageService;
+    public static UserService userService;
     @Autowired
     public MessageService messageService2;
     @PostConstruct
     public void init(){
         messageService = messageService2;
     }
+    @Autowired
+    public UserService userService2;
+    @PostConstruct
+    public void init1(){
+        userService = userService2;
+    }
     //建立连接接口
     @OnOpen
     public void onOpen(Session session, @PathParam("userAccount") String userAccount) {
         SessionPool.sessions.put(userAccount,session);
+        userService.updateUserStateOnline(userAccount);
 //        List<Message> notReadMessage = messageService.selectAllNotReadMessage(userAccount);
 //        List<Session> sessionList = groupMemberInfoMap.computeIfAbsent(sid, k -> new ArrayList<>());
 //        Set<Integer> onlineUserList = onlineUserMap.computeIfAbsent(sid, k -> new HashSet<>());
@@ -45,8 +54,10 @@ public class WebSocketEndPoint {
     }
     //关闭连接接口
     @OnClose
-    public void onClose(Session session) throws IOException {
+    public void onClose(Session session,@PathParam("userAccount") String userAccount) throws IOException {
         System.out.println("调用了OnClose");
+        System.out.println(userAccount);
+        userService.updateUserStateOffOnline(userAccount);
         SessionPool.close(session.getId());
         session.close();
     }
