@@ -39,13 +39,18 @@ public class UserController {
 //            returnData.put("msg","未登录");
             return "未登录";
         }
-//        user.setUserName(simpleUserInfo.getUserName());
-//        user.setUserAccount(simpleUserInfo.getUserAccount());
         if(user.getPassword()!=null&&!user.getPassword().equals("")){
             user.setPassword( DescUtil.encrypt(AesUtil.aesDecrypt( user.getPassword(),"1234567890ABCDEF")));
         }else{
             user.setPassword(null);
         }
+//        User user = new User();
+//        user.setUserName(userVo.getUserName());
+//        user.setUserAccount(userVo.getUserAccount());
+//        user.setPassword(userVo.getPassword());
+//        user.setState(userVo.getState());
+
+
         userMapper.updateById(user);
         return "ok";
 

@@ -47,6 +47,7 @@ public class LoginController {
                 returnData.put("msg", "ok");
                 returnData.put("userName", rightUser.getUserName());
                 returnData.put("userAccount", rightUser.getUserAccount());
+                returnData.put("userImg", rightUser.getUserImg());
                 return returnData;
             } else {
                 returnData.put("msg", "密码错误");
