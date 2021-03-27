@@ -9,7 +9,7 @@
         delete from chat_friends where userAccount = #{userAccount} and fUserAccount = #{fUserAccount}
     </delete>
     <select id="selectUserFriendsByUserAccount" resultType="com.xiyiwe.xichat.pojo.user.User">
-        select u.userAccount,u.userName,u.state from chat_friends as cf,userinfo as u where cf.userAccount = #{userAccount} and cf.fuserAccount = u.userAccount
+        select u.userAccount,u.userName,u.state,u.userImg from chat_friends as cf,userinfo as u where cf.userAccount = #{userAccount} and cf.fuserAccount = u.userAccount
     </select>
 
 </mapper>

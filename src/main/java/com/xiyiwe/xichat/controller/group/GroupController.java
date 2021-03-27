@@ -1,7 +1,9 @@
 package com.xiyiwe.xichat.controller.group;
 
 import com.xiyiwe.xichat.pojo.message.Message;
+import com.xiyiwe.xichat.pojo.user.User;
 import com.xiyiwe.xichat.pojo.vo.GroupAndNotReadMessageCount;
+import com.xiyiwe.xichat.pojo.vo.UserImgVo;
 import com.xiyiwe.xichat.service.group.GroupService;
 import com.xiyiwe.xichat.service.message.MessageService;
 import com.xiyiwe.xichat.service.redisService.RedisService;
@@ -111,6 +113,7 @@ public class GroupController {
         }
         return null;
     }
+    //退出群组
     @RequestMapping("/group/quitGroup/{groupId}")
     void deleteFriend(@PathVariable String groupId,HttpServletRequest request)
     {
@@ -118,5 +121,15 @@ public class GroupController {
             String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
             groupService.quitGroup(userAccount,groupId);
         }
+    }
+    //查出群组内所有人的信息
+    @GetMapping("/group/getAllGroupMemberUserImg/{groupId}")
+    Map<String,String> getAllGroupMemberUserImg(@PathVariable String groupId, HttpServletRequest request)
+    {
+        if(request.getHeader("Authorization")!=null){
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            return groupService.getAllGroupMemberUserImg(groupId);
+        }
+        return null;
     }
 }

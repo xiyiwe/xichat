@@ -10,4 +10,9 @@
         select chatgroup.groupId,chatgroup.groupName from chatgroup,usergroup
         where usergroup.userAccount= #{userAccount} and usergroup.groupId = chatgroup.groupId
     </select>
+    <select id="getAllGroupMember" resultType="com.xiyiwe.xichat.pojo.user.User">
+        select userinfo.*  from usergroup,userinfo
+        where usergroup.userAccount = userinfo.userAccount
+        and usergroup.groupId = #{groupId}
+    </select>
 </mapper>

@@ -5,13 +5,12 @@ import com.xiyiwe.xichat.dao.group.UserGroupMapper;
 import com.xiyiwe.xichat.dao.message.MessageMapper;
 import com.xiyiwe.xichat.pojo.group.Group;
 import com.xiyiwe.xichat.pojo.group.UserGroup;
+import com.xiyiwe.xichat.pojo.user.User;
 import com.xiyiwe.xichat.pojo.vo.GroupAndNotReadMessageCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class GroupService {
@@ -65,5 +64,15 @@ public class GroupService {
 
     public void quitGroup(String userAccount, String groupId) {
         userGroupMapper.quitGroup(userAccount,groupId);
+    }
+
+
+    public Map<String,String> getAllGroupMemberUserImg(String groupId) {
+        List<User> allGroupMember = userGroupMapper.getAllGroupMember(groupId);
+        HashMap<String, String> userImgMap = new HashMap<>();
+        for (User user : allGroupMember) {
+            userImgMap.put(user.getUserAccount(),user.getUserImg());
+        }
+        return userImgMap;
     }
 }

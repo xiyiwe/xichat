@@ -28,6 +28,7 @@ public class ChatFriendService {
             friendAndNotReadMessageCount.setUserAccount(simpleUserInfo.getUserAccount());
             friendAndNotReadMessageCount.setUserName(simpleUserInfo.getUserName());
             friendAndNotReadMessageCount.setState(simpleUserInfo.getState());
+            friendAndNotReadMessageCount.setUserImg(simpleUserInfo.getUserImg());
             friendAndNotReadMessageCountList.add(friendAndNotReadMessageCount);
         }
         return friendAndNotReadMessageCountList;

@@ -3,6 +3,7 @@ package com.xiyiwe.xichat.dao.group;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xiyiwe.xichat.pojo.group.Group;
 import com.xiyiwe.xichat.pojo.group.UserGroup;
+import com.xiyiwe.xichat.pojo.user.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,6 @@ public interface UserGroupMapper extends BaseMapper<UserGroup> {
 
 
     void quitGroup(@Param("userAccount") String userAccount,@Param("groupId") String groupId);
+
+    List<User> getAllGroupMember(@Param("groupId") String groupId);
 }

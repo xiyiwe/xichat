@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class FriendAndNotReadMessageCount {
     String userAccount;
     String userName;
+    String userImg;
     String state;
     Integer notReadMessageCount;
 
