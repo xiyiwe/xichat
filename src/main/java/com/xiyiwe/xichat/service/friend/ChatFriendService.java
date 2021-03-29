@@ -35,7 +35,7 @@ public class ChatFriendService {
     }
 
     public void deleteFriend(String userAccount, String fUserAccount) {
-
         chatFriendMapper.deleteFriend(userAccount,fUserAccount);
+        chatFriendMapper.deleteFriend(fUserAccount,userAccount);
     }
 }

@@ -14,7 +14,9 @@ import java.util.List;
 public interface ChatFriendMapper extends BaseMapper<ChatFriend> {
     Integer insertChatFriend( ChatFriend chatFriend);
 
-    List<User> selectUserFriendsByUserAccount(String Account);
+    User checkFriend(@Param("userAccount")String userAccount,@Param("fUserAccount")String fUserAccount);
+
+    List<User> selectUserFriendsByUserAccount(@Param("userAccount") String Account);
 
     void deleteFriend(@Param("userAccount") String userAccount,@Param("fUserAccount") String fUserAccount);
 }
