@@ -18,11 +18,7 @@ public class LoginInfo {
     @Length(max = 64, message = "用户名长度错误")
 //    @Pattern(regexp = "^([a-z]|[A-Z]|[0-9])([a-z]|[A-Z]|[0-9]|[\\.]|[-]|[_]|[@]){1,63}$", message = "登录名或登录密码不正确")
     private String userAccount;
-
     @NotBlank(message = "密码为空")
     @Length( max = 50, message = "密码长度错误")
     private String password;
-
-
-
 }

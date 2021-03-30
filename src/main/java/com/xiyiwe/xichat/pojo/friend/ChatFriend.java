@@ -12,7 +12,10 @@ import java.util.Date;
 public class ChatFriend {
 //    @TableId(type = IdType.AUTO)
 //    String id;
+    //用户账号
     String userAccount;
+    //好友账号
     String fUserAccount;
+    //添加时间
     Date addTime;
 }

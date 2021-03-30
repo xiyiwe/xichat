@@ -42,6 +42,7 @@ public class WebSocketEndPoint {
     //建立连接接口
     @OnOpen
     public void onOpen(Session session, @PathParam("userAccount") String userAccount) {
+        System.out.println(userAccount+"调用了onopen接口 ");
         SessionPool.sessions.put(userAccount,session);
         userService.updateUserStateOnline(userAccount);
 //        List<Message> notReadMessage = messageService.selectAllNotReadMessage(userAccount);
@@ -60,6 +61,7 @@ public class WebSocketEndPoint {
         userService.updateUserStateOffOnline(userAccount);
         SessionPool.close(session.getId());
         session.close();
+        SessionPool.sessions.remove(userAccount);
     }
     //发送消息接口
     @OnMessage

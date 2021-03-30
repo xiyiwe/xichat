@@ -8,8 +8,10 @@ import lombok.Data;
 @Data
 @TableName("chatgroup")
 public class Group {
+    //群组ID
     @TableId("groupId")
     String groupId;
+    //群组名
     @TableField("groupName")
     String groupName;
 }

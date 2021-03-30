@@ -27,7 +27,7 @@ public class LoginController {
     RedisService redisService;
     @Autowired
     UserService userService;
-
+    //登录
     @RequestMapping(value = "/login", produces = "application/json;charset=UTF-8")
     @ResponseBody
     Map<String, String> login(@RequestBody LoginInfo loginInfo) throws Exception {
@@ -61,7 +61,7 @@ public class LoginController {
 //        aesCoder.decrypt(loginInfo.getUserAccount());
 //        aesCoder.decrypt(loginInfo.getPassword());
     }
-
+    //登出
     @GetMapping("/logout")
     void logout(HttpServletRequest request) {
         if (request.getHeader("Authorization") != null) {
@@ -80,7 +80,7 @@ public class LoginController {
         redisService.setUserInfo("123", simpleUserInfo);
         redisService.getUserInfo("123");
     }
-
+    //检查token
     @GetMapping("/checkToken")
     Map<String, String> checkToken(HttpServletRequest request) {
         Map<String, String> returnData = new HashMap<>();

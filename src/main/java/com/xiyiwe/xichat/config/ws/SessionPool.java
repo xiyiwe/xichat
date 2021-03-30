@@ -23,7 +23,9 @@ public class SessionPool {
     public void init(){
         messageService = messageService2;
     }
+
     public static Map<String, Session> sessions = new ConcurrentHashMap<>();
+
     public static void close(String sessionId) throws IOException {
 //        for (String userId : SessionPool.sessions.keySet()){
 //            Session session = sessions.get(sessionId);
@@ -36,6 +38,10 @@ public class SessionPool {
             if(session != null) {
                 sessions.get(sessionId).close();
             }
+        SessionPool.sessions.forEach((key,value)->{
+            System.out.println(key);
+            System.out.println(value);
+        });
     }
     public static void sendMessage(String sessionId , String message){
         sessions.get(sessionId).getAsyncRemote().sendText(message);
