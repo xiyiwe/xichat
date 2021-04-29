@@ -142,10 +142,10 @@ public class MessageService {
         System.out.println(file.getContentType());
         String destination = "";
             if (file.getContentType().contains("image")){
-                destination = "C:\\zyz\\biyesheji\\xichat\\xichat-vue\\xichat-vue\\public\\static\\images\\"+ file.getOriginalFilename();
+                destination = "D:\\itemRepository\\gitRepository\\xichat-vue\\public\\static\\images\\"+ file.getOriginalFilename();
             }
         else{
-            destination = "C:\\zyz\\biyesheji\\xichat\\xichat-vue\\xichat-vue\\public\\static\\files\\"+ file.getOriginalFilename();
+            destination = "D:\\itemRepository\\gitRepository\\xichat-vue\\public\\static\\files\\"+ file.getOriginalFilename();
         }
         File file1 = new File(destination);
         file.transferTo(file1);

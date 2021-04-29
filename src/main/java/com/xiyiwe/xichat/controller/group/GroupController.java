@@ -122,13 +122,23 @@ public class GroupController {
             groupService.quitGroup(userAccount,groupId);
         }
     }
-    //查出群组内所有人的信息
+    //查出群组内所有人头像的信息
     @GetMapping("/group/getAllGroupMemberUserImg/{groupId}")
     Map<String,String> getAllGroupMemberUserImg(@PathVariable String groupId, HttpServletRequest request)
     {
         if(request.getHeader("Authorization")!=null){
             String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
             return groupService.getAllGroupMemberUserImg(groupId);
+        }
+        return null;
+    }
+    //查出群组内所有人的信息
+    @GetMapping("/group/getGroupMemberInfo/{groupId}")
+    List<User> getGroupMemberInfo(@PathVariable String groupId, HttpServletRequest request)
+    {
+        if(request.getHeader("Authorization")!=null){
+            String userAccount = redisService.getUserInfo(request.getHeader("Authorization")).getUserAccount();
+            return groupService.getGroupMemberInfo(groupId);
         }
         return null;
     }

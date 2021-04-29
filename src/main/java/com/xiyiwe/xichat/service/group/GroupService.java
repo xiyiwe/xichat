@@ -75,4 +75,9 @@ public class GroupService {
         }
         return userImgMap;
     }
+
+    public List<User> getGroupMemberInfo(String groupId) {
+
+        return groupMapper.selectGroupMemberInfo(groupId);
+    }
 }
