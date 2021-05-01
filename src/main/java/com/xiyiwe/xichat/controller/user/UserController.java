@@ -50,7 +50,6 @@ public class UserController {
 //        user.setPassword(userVo.getPassword());
 //        user.setState(userVo.getState());
 
-
         userMapper.updateById(user);
         return "ok";
 
