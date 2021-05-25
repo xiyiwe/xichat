@@ -148,7 +148,6 @@ public class DescUtil {
      * @description 验证密码是否正确
      * Modify History:              Date             Programmer       Notes
      * ---------        ---------------  ---------
-     * 2017年6月5日 下午2:01:42           舒小龙                     Initial
      * *********************************************************************
      */
     public static boolean checkPassWord(String formPwd, String sourcePwd) {
@@ -159,7 +158,7 @@ public class DescUtil {
     }
 
     public static void main(String[] args) {
-        System.err.println(decrypt("51685549BA5C7D9C4B26D3005023B585"));
+        System.err.println(decrypt("ZOUc5BHlTVGd1Z/jc4HU9Q=="));
         System.err.println(encrypt("baseadmin_5"));
     }
 }
